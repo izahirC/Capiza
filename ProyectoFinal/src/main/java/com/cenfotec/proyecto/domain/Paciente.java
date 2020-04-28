@@ -11,8 +11,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "tpaciente")
 public class Paciente {
 
-	 private String id;
+		private String id;
 	    private String nombre;
+	    private String apellido;
 
 
 	    @DynamoDBHashKey
@@ -32,6 +33,15 @@ public class Paciente {
 
 	    public void setNombre(String nombre) {
 	        this.nombre = nombre;
+	    }
+	    
+	    @DynamoDBAttribute
+	    public String getApellido() {
+	        return apellido;
+	    }
+
+	    public void setApellido(String apellido) {
+	        this.apellido = apellido;
 	    }
 
 	
