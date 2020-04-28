@@ -1,6 +1,7 @@
 package com.cenfotec.proyecto.web;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.cenfotec.proyecto.domain.Paciente;
 import com.cenfotec.proyecto.repository.PacienteRepository;
+import com.cenfotec.proyecto.service.PacienteServiceImpl;
 import com.google.gson.Gson;
 
 @Controller
@@ -25,7 +27,10 @@ public class PacienteController {
 	AmazonDynamoDB amazonDynamoDB;
 
 	@Autowired
-	PacienteRepository awsServiceRepository;
+	PacienteRepository pacienteRepository;
+	
+	@Autowired
+	PacienteServiceImpl pacienteService;
 
 	@RequestMapping("/")
 	public String index(Model model) throws ParseException {
@@ -37,25 +42,33 @@ public class PacienteController {
 
 		TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
 
-		Paciente awsService = new Paciente();
+		Paciente pacienteNuevo = new Paciente();
 
-		awsService.setNombre("Arturo");
+		pacienteNuevo.setNombre("Arturo");
+		pacienteNuevo.setApellido("Aymerich");
+		pacienteNuevo.setEstadoCivil("Soltero");
+		pacienteNuevo.setGenero(Paciente.Genero.MASCULINO);
+		pacienteNuevo.setDireccion("Escazu Sanjose");
+		pacienteNuevo.setFechaNacimiento(new Date());
+		pacienteNuevo.setOcupacion("Ïngeniero");
+		pacienteNuevo.setTelefono("87191177");
+		pacienteNuevo.setTipoSangre(Paciente.TipoSangre.Op);
 
-		awsService = awsServiceRepository.save(awsService);
+		pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);
 
 	
 
-		String awsServiceId = awsService.getId();
+		String awsServiceId = pacienteNuevo.getId();
 
 
 
-		Optional<Paciente> awsServiceQueried = awsServiceRepository.findById(awsServiceId);
+		Optional<Paciente> awsServiceQueried = pacienteService.getById(awsServiceId);
 
 		if (awsServiceQueried.get() != null) {
 			System.out.print("Queried object: " + new Gson().toJson(awsServiceQueried.get()));
 		}
 
-		Iterable<Paciente> awsServices = awsServiceRepository.findAll();
+		Iterable<Paciente> awsServices = pacienteRepository.findAll();
 
 		for (Paciente awsServiceObject : awsServices) {
 			System.out.print("List object: " + new Gson().toJson(awsServiceObject));
