@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head  th:fragment="header">
+<meta charset="utf-8"></meta>
+<meta http-equiv="Content-Type" content="text/html"></meta>
+
+<link href="webjars/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="webjars/datatables/1.10.20/css/dataTables.bootstrap.css" rel="stylesheet">
+
+<!-- <link href="webjars/datatables/1.10.20/css/dataTables.bootstrap4.css" rel="stylesheet"> -->
+<!-- <link href="webjars/datatables/1.10.20/css/dataTables.foundation.css" rel="stylesheet"> -->
+
+<script src="webjars/jquery/3.4.1/jquery.js"></script>
+
+<script src="webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="webjars/datatables/1.10.20/js/dataTables.bootstrap.js"></script>
+<link href="webjars/datatables/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap.css" rel="stylesheet">
+<script src="webjars/bootstrap/4.1.0/js/bootstrap.js" ></script>
+
+<title>Producto</title>
+</head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="menu">
+			<a class="navbar-brand" href="/">Medicine For All</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarColor02" aria-controls="navbarColor02"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarColor02">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link" href="/">Inicio
+							<span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/nuevoProducto">Nuevo Producto</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="/listaProductos2">Lista Productos Por Bodega</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="/listaPorDataTables">Lista Por DataTables</a>
+					</li>
+				</ul>
+				
+			</div>
+		</nav>
+		
+<script th:fragment="js">
+inputNumerico=function (evt)
+{
+   var charCode = (evt.which) ? evt.which : event.keyCode
+   if (charCode > 31 && (charCode < 48 || charCode > 57))
+      return false;
+
+   return true;
+};
+</script>

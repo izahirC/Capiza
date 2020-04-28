@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="/Menu :: header" ></div>
+<script src="js/ProductoJs.js"></script>
+
+<title>Producto</title>
+</head>
+<body >
+
+	<div class="row">
+		<div class="col-12">
+
+			<div th:replace="/Menu :: menu"></div>
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="row p-4">
+			<form class="col-1" th:object="${bodega}" method="post" th:each="entry,status : ${bodegas}" th:action="@{/listaProductos2}">
+				<div class="row" >
+				<button onclick="actualizarDatos(this.value)" class="btn btn-secondary my-2 my-sm-0" type="button" th:value="${entry.id}" th:text="${entry.nombre}"></button>
+				</div>
+			</form>
+			</div>
+		
+		
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<table id="tblProductos" class="display" style="width: 100%">
+				<thead>
+					<tr>
+						<th scope="col">id</th>
+						<th scope="col">nombre</th>
+						<th scope="col">calidad</th>
+						<th scope="col">cantidad</th>
+						<th scope="col">cajas</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+
+		</div>
+
+	</div>
+
+
+	<script>
+     $(document).ready(function () {
+         var table = $('#tblProductos').DataTable({
+        	 "bSort": false,
+        	 "searching": false,
+             "columns": [
+                { "data": "id" },
+                { "data": "nombre" },
+               { "data": "calidad" },
+                { "data": "cantidad_total" },
+               { "data": "numero_cajas" }
+           ]
+        });
+      
+         
+         
+      $( table.table().container() ).removeClass( 'form-inline' );
+      $( table.table().container() ).addClass( 'p-5' );
+      $("#tblProductos").removeClass();
+      $("#tblProductos").addClass("table table-hover");
+      $("#tblProductos tbody tr").each(function (){this.classList.add("table-primary")})
+         
+  
+    });
+
+	</script>
+</html>
