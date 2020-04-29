@@ -20,14 +20,12 @@ import com.cenfotec.proyecto.service.PacienteServiceImpl;
 import com.google.gson.Gson;
 
 @Controller
-public class PacienteController {
+public class EnfermedadController {
 	DynamoDBMapper dynamoDBMapper;
 
 	@Autowired
 	AmazonDynamoDB amazonDynamoDB;
 
-	@Autowired
-	PacienteRepository pacienteRepository;
 	
 	@Autowired
 	PacienteServiceImpl pacienteService;
@@ -65,7 +63,7 @@ public class PacienteController {
 			System.out.print("Queried object: " + new Gson().toJson(awsServiceQueried.get()));
 		}
 
-		Iterable<Paciente> awsServices = pacienteRepository.findAll();
+		Iterable<Paciente> awsServices = pacienteService.getAllPacientes();
 
 		for (Paciente awsServiceObject : awsServices) {
 			System.out.print("List object: " + new Gson().toJson(awsServiceObject));

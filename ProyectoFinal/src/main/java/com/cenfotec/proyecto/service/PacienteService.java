@@ -9,7 +9,7 @@ import com.cenfotec.proyecto.domain.Paciente;
 
 public interface PacienteService {
 
-	public Paciente savePaciente(Paciente newProducto);
+	public Paciente savePaciente(Paciente newPaciente);
 	public List<Paciente> getAllPacientes();
 	public Optional<Paciente> getById(String id);
 

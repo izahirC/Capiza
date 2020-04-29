@@ -1,5 +1,6 @@
 package com.cenfotec.proyecto.dbconfig;
 
+
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;

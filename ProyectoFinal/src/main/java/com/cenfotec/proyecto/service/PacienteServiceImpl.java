@@ -17,8 +17,8 @@ public class PacienteServiceImpl implements PacienteService {
 	PacienteRepository pacienteRepo;
 
 	@Override
-	public Paciente savePaciente(Paciente newProducto) {
-		return pacienteRepo.save(newProducto);
+	public Paciente savePaciente(Paciente newPaciente) {
+		return pacienteRepo.save(newPaciente);
 		
 	}
 
