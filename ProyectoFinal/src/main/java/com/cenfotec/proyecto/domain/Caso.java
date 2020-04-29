@@ -18,7 +18,7 @@ public class Caso {
 	    private String paciente;
 	    private String enfermedad;
 	    private String clinica; 
-	    private LocalDateTime fecha;
+	    private Date fecha;
 	    private String sintomas;
 	    
 	    
@@ -61,11 +61,11 @@ public class Caso {
 	    }
 	    
 	    @DynamoDBAttribute
-	    public LocalDateTime getFecha() {
+	    public Date getFecha() {
 	        return fecha;
 	    }
 
-	    public void setFecha(LocalDateTime fecha) {
+	    public void setFecha(Date fecha) {
 	        this.fecha = fecha;
 	    }	   
 	    

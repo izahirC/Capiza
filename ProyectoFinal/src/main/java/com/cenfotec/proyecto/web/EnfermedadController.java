@@ -73,7 +73,7 @@ public class EnfermedadController {
 
 
 	
-	public void ConectarTabla(Object entidad) {
+	public void CrearTabla(Object entidad) {
 
 
 		dynamoDBMapper=new DynamoDBMapper(amazonDynamoDB);

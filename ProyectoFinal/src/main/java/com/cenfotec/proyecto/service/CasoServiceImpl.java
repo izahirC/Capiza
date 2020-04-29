@@ -31,7 +31,7 @@ public class CasoServiceImpl implements CasoService {
 	@Override
 	public Optional<Caso> getById(String id) {
 		Optional<Caso> caso = casoRepo.findById(id);
-		return Caso;
+		return caso;
 	}
 
 	
