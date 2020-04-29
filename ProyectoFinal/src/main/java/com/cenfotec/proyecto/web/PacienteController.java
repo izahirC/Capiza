@@ -28,6 +28,12 @@ public class PacienteController {
 
 	@Autowired
 	PacienteRepository pacienteRepository;
+	@Autowired
+	CasoRepository casoRepository;
+	@Autowired
+	ClinicaRepository clinicaRepository;
+	@Autowired
+	EnfermedadRepository enfermedadRepository;
 	
 	@Autowired
 	PacienteServiceImpl pacienteService;
@@ -46,7 +52,7 @@ public class PacienteController {
 		pacienteNuevo.setGenero(Paciente.Genero.MASCULINO);
 		pacienteNuevo.setDireccion("Escazu Sanjose");
 		pacienteNuevo.setFechaNacimiento(new Date());
-		pacienteNuevo.setOcupacion("Ïngeniero");
+		pacienteNuevo.setOcupacion("Ingeniero");
 		pacienteNuevo.setTelefono("87191177");
 		pacienteNuevo.setTipoSangre(Paciente.TipoSangre.Op);
 		

@@ -14,23 +14,23 @@ import com.cenfotec.proyecto.repository.EnfermedadRepository;
 @Service
 public class EnfermedadServiceImpl implements EnfermedadService {
 	@Autowired
-	EnfermedadRepository pacienteRepo;
+	EnfermedadRepository enfermedadRepo;
 
 	@Override
 	public Enfermedad saveEnfermedad(Enfermedad newEnfermedad) {
-		return pacienteRepo.save(newEnfermedad);
+		return enfermedadRepo.save(newEnfermedad);
 		
 	}
 
 	@Override
 	public List<Enfermedad> getAllEnfermedades() {
-		List<Enfermedad> listaEnfermedads=(List<Enfermedad>) pacienteRepo.findAll();
-		return listaEnfermedads;
+		List<Enfermedad> listaEnfermedades=(List<Enfermedad>) enfermedadRepo.findAll();
+		return listaEnfermedades;
 	}
 
 	@Override
 	public Optional<Enfermedad> getById(String id) {
-		Optional<Enfermedad> enfermedad = pacienteRepo.findById(id);
+		Optional<Enfermedad> enfermedad = enfermedadRepo.findById(id);
 		return enfermedad;
 	}
 
