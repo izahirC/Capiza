@@ -60,25 +60,25 @@ public class PacienteController {
 		pacienteNuevo.setTipoSangre(Paciente.TipoSangre.Op);
 		
 
-		pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);
+		//pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);
 
 	
-
-		String awsServiceId = pacienteNuevo.getId();
-
-
-
-		Optional<Paciente> awsServiceQueried = pacienteService.getById(awsServiceId);
-
-		if (awsServiceQueried.get() != null) {
-			System.out.print("Queried object: " + new Gson().toJson(awsServiceQueried.get()));
-		}
-
-		Iterable<Paciente> awsServices = pacienteRepository.findAll();
-
-		for (Paciente awsServiceObject : awsServices) {
-			System.out.print("List object: " + new Gson().toJson(awsServiceObject));
-		}
+//
+//		String awsServiceId = pacienteNuevo.getId();
+//
+//
+//
+//		Optional<Paciente> awsServiceQueried = pacienteService.getById(awsServiceId);
+//
+//		if (awsServiceQueried.get() != null) {
+//			System.out.print("Queried object: " + new Gson().toJson(awsServiceQueried.get()));
+//		}
+//
+//		Iterable<Paciente> awsServices = pacienteRepository.findAll();
+//
+//		for (Paciente awsServiceObject : awsServices) {
+//			System.out.print("List object: " + new Gson().toJson(awsServiceObject));
+//		}
 		return "index";
 	}
 
