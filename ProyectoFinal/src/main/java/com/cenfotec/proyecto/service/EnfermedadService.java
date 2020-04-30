@@ -13,7 +13,7 @@ public interface EnfermedadService {
 	public Enfermedad saveEnfermedad(Enfermedad newEnfermedad);
 	public List<Enfermedad> getAllEnfermedades();
 	public Optional<Enfermedad> getById(String id);
-
+	public void deleteById(String id);
 	
 	
 }

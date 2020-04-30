@@ -20,6 +20,7 @@ public class Caso {
 	    private String clinica; 
 	    private Date fecha;
 	    private String sintomas;
+	    private String estado;
 	    
 	    
 	    @DynamoDBHashKey
@@ -76,6 +77,15 @@ public class Caso {
 
 	    public void setSintomas(String sintomas) {
 	        this.sintomas = sintomas;
+	    }
+	    
+	    @DynamoDBAttribute
+	    public String getEstado() {
+	        return estado;
+	    }
+
+	    public void setEstado(String estado) {
+	        this.estado = estado;
 	    }
 	
 }

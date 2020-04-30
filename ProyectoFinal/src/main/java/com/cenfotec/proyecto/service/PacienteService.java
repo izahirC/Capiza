@@ -12,7 +12,7 @@ public interface PacienteService {
 	public Paciente savePaciente(Paciente newPaciente);
 	public List<Paciente> getAllPacientes();
 	public Optional<Paciente> getById(String id);
-
+	public void deleteById(String id);
 	
 	
 }

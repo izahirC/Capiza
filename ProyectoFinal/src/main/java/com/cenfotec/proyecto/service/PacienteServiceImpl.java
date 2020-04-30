@@ -34,6 +34,10 @@ public class PacienteServiceImpl implements PacienteService {
 		return paciente;
 	}
 
-	
+	@Override
+	public void deleteById(String id){
+		pacienteRepo.deleteById(id);
+			
+	}
 
 }

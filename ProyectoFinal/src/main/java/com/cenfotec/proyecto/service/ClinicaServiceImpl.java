@@ -34,6 +34,10 @@ public class ClinicaServiceImpl implements ClinicaService {
 		return clinica;
 	}
 
-	
+	@Override
+	public void deleteById(String id){
+		clinicaRepo.deleteById(id);
+			
+	}
 
 }

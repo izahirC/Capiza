@@ -34,6 +34,11 @@ public class EnfermedadServiceImpl implements EnfermedadService {
 		return enfermedad;
 	}
 
+	@Override
+	public void deleteById(String id){
+		enfermedadRepo.deleteById(id);
+			
+	}
 	
 
 }

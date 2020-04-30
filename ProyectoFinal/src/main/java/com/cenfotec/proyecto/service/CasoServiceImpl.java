@@ -2,6 +2,9 @@ package com.cenfotec.proyecto.service;
 
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,8 @@ public class CasoServiceImpl implements CasoService {
 
 	@Override
 	public Caso saveCaso(Caso newCaso) {
+		Date date = new Date();
+		newCaso.setFecha(date);
 		return casoRepo.save(newCaso);
 		
 	}
@@ -34,6 +39,11 @@ public class CasoServiceImpl implements CasoService {
 		return caso;
 	}
 
+	@Override
+	public void deleteById(String id){
+		casoRepo.deleteById(id);
+			
+	}
 	
 
 }

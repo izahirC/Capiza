@@ -11,7 +11,7 @@ public interface CasoService {
 	public Caso saveCaso(Caso newCaso);
 	public List<Caso> getAllCasos();
 	public Optional<Caso> getById(String id);
-
+	public void deleteById(String id);
 	
 	
 }
