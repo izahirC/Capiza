@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,19 +51,19 @@ public class PacienteController {
 	@Autowired
 	AmazonDynamoDB amazonDynamoDB;
 
-	@Autowired
-	PacienteRepository pacienteRepository;
-	@Autowired
-	CasoRepository casoRepository;
-	@Autowired
-	ClinicaRepository clinicaRepository;
-	@Autowired
-	EnfermedadRepository enfermedadRepository;
-	
-	@Autowired
-	PacienteServiceImpl pacienteService;
+//	@Autowired
+//	PacienteRepository pacienteRepository;
+//	@Autowired
+//	CasoRepository casoRepository;
+//	@Autowired
+//	ClinicaRepository clinicaRepository;
+//	@Autowired
+//	EnfermedadRepository enfermedadRepository;
+//	
 	@Autowired
 	CasoServiceImpl casoService;
+	@Autowired
+	PacienteServiceImpl pacienteService;
 	@Autowired
 	EnfermedadServiceImpl enfermedadService;
 	@Autowired
@@ -136,8 +139,43 @@ public class PacienteController {
 	@RequestMapping("/listaProductos")
 	public Clinica guardarClinica(@RequestBody Clinica nuevaClinica) {
 		return clinicaService.saveClinica(nuevaClinica);
-		 
+	}	 
+	@RequestMapping("/")
+	public String index(Model model) throws ParseException {
+
+		Caso casoNuevo = new Caso();
+
+		// ConectarTabla(casoNuevo);
+
+		Optional<Paciente> p=pacienteService.getById("12045fef-b3a0-4248-af6f-eeb46983c688");
+		casoNuevo.setClinica("Clinica");
+		casoNuevo.setEnfermedad("enfermedad");
+		casoNuevo.setSintomas("Sintomas");
+		//casoNuevo.setPaciente(p.get());
+
+		
+		casoNuevo= casoService.saveCaso(casoNuevo);
+		// pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);
+
+//
+//		String awsServiceId = pacienteNuevo.getId();
+//
+//
+//
+//		Optional<Paciente> awsServiceQueried = pacienteService.getById(awsServiceId);
+//
+//		if (awsServiceQueried.get() != null) {
+//			System.out.print("Queried object: " + new Gson().toJson(awsServiceQueried.get()));
+//		}
+//
+//		Iterable<Paciente> awsServices = pacienteRepository.findAll();
+//
+//		for (Paciente awsServiceObject : awsServices) {
+//			System.out.print("List object: " + new Gson().toJson(awsServiceObject));
+//		}
+		return "index";
 	}
+
 
 	@RequestMapping(value="/paciente/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
 	public @ResponseBody List<Paciente> obtenerPacientes(Model model){		
@@ -233,16 +271,62 @@ public class PacienteController {
 		}).orElse(ResponseEntity.notFound().build());
 	}
 	
+	@RequestMapping("/nuevoCaso")
+	public String nuevoCaso(Model model) throws ParseException {
+		Caso nCaso = new Caso();
+		model.addAttribute("caso", nCaso);
+		// para realizar el Dropdown
+
+		List<Enfermedad> listaEnfermedades = enfermedadService.getAllEnfermedades();
+		model.addAttribute("enfermedades", listaEnfermedades);
+
+		List<Clinica> listaClinicas = clinicaService.getAllClinicas();
+		model.addAttribute("clinicas", listaClinicas);
+
+		return "nuevoCaso";
+	}
+
+	@PostMapping("/addCaso")
+	public String submit(Model model, @ModelAttribute Caso caso, BindingResult result) {
+		if (!result.hasErrors()) {
+			casoService.saveCaso(caso);
+			Caso nCaso = new Caso();
+			model.addAttribute("caso", nCaso);
+			// para realizar el Dropdown
+
+			List<Enfermedad> listaEnfermedades = enfermedadService.getAllEnfermedades();
+			model.addAttribute("enfermedades", listaEnfermedades);
+
+			List<Clinica> listaClinicas = clinicaService.getAllClinicas();
+			model.addAttribute("clinicas", listaClinicas);
+			model.addAttribute("nuevo", caso.getId());
+			return "nuevoProducto";
+		} else {
+
+			Caso nCaso = new Caso();
+			model.addAttribute("caso", nCaso);
+			// para realizar el Dropdown
+
+			List<Enfermedad> listaEnfermedades = enfermedadService.getAllEnfermedades();
+			model.addAttribute("enfermedades", listaEnfermedades);
+
+			List<Clinica> listaClinicas = clinicaService.getAllClinicas();
+			model.addAttribute("clinicas", listaClinicas);
+			model.addAttribute("error", "Error");
+			return "nuevoProducto";
+		}
+
+	}
+
 	public void ConectarTabla(Object entidad) {
 
+		dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
-		dynamoDBMapper=new DynamoDBMapper(amazonDynamoDB);
-		
 		CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(entidad.getClass());
-	
-		tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L,1L));
-	
-		TableUtils.createTableIfNotExists(amazonDynamoDB,tableRequest);
+
+		tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+		TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
 	}
 
 }

@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en-US" xmlns:th="http://www.thymeleaf.org">
 <head>
-<div th:replace="/Menu :: header"></div>
-<title>Producto</title>
+<div th:replace="/Shared :: header"></div>
+<title>Caso</title>
 </head>
 <body>
 
 	<div class="row">
 		<div class="col-12">
 
-			<div th:replace="/Menu :: menu"></div>
+			<div th:replace="/Shared :: menu"></div>
 
 		</div>
 
@@ -19,13 +19,13 @@
 		<div class="col-4"></div>
 		<div class="col-4 mt-2 pt-3" style="background: aliceblue;">
 			<div class="col4">
-				<form id="formNProducto" th:action="@{/addProducto}"
-					th:object="${producto}" method="post">
+				<form id="formNCaso" th:action="@{/addCaso}"
+					th:object="${caso}" method="post">
 					<fieldset>
-						<legend>Agregar Producto</legend>
+						<legend>Agregar Caso</legend>
 						<div class="form-group has-success">
-							<label class="form-control-label" for="inputSuccess1">Nombre</label>
-							<input required="required" th:field="*{nombre}" id="idNombre"
+							<label class="form-control-label" for="inputSuccess1">Paciente</label>
+							<input required="required" th:field="*{paciente}" id="paciente"
 								type="text" value="" class="form-control">
 
 						</div>
@@ -35,21 +35,19 @@
 
 						<div class="row form-group">
 							<div class="col-6 form-group">
-								<label for="exampleSelect1">Calidad</label> <select
-									th:field="*{calidad}" class="form-control" id="exampleSelect1">
-									<option value="A">Maximo</option>
-									<option value="B">Internmedio</option>
-									<option value="C">Minimos</option>
+								<label for="exampleSelect1">Enfermedad</label> <select
+									th:field="*{enfermedad}" class="form-control" id="enfermedad">
+									<option th:each="entry,status : ${enfermedades}" value="1"
+										th:text="${entry.nombre}" th:value="${entry.id}"></option>
 								</select>
-
 							</div>
 
 
 
 							<div class="col-6 form-group">
-								<label for="exampleSelect1">Bodega</label> <select
-									th:field="*{idBodega}" class="form-control" id="idBodega">
-									<option th:each="entry,status : ${bodegas}" value="1"
+								<label for="exampleSelect1">Clinica</label> <select
+									th:field="*{clinica}" class="form-control" id="clinica">
+									<option th:each="entry,status : ${clinicas}" value="1"
 										th:text="${entry.nombre}" th:value="${entry.id}"></option>
 								</select>
 							</div>
@@ -61,18 +59,9 @@
 
 						<div class="row form-group">
 							<div class="col-6">
-								<label class="form-control-label" for="inputSuccess1">Cantidad
-									total</label> <input required="required"
-									onkeypress="return inputNumerico(event)" type="text" value=""
-									th:field="*{cantidadTotal}" class="form-control"
-									id="inputValid">
-
-							</div>
-							<div class="col-6">
-								<label class="form-control-label" for="inputSuccess1">Numero
-									Cajas</label> <input required="required"
-									onkeypress="return inputNumerico(event)" type="text" value=""
-									th:field="*{numeroCajas}" class="form-control"
+								<label class="form-control-label" for="inputSuccess1">Sintomas</label> <input required="required"
+									 type="text" value=""
+									th:field="*{sintomas}" class="form-control"
 									id="inputValid">
 
 							</div>
@@ -101,7 +90,7 @@
 				<h5 class="modal-title" >Exitoso</h5>
 			</div>
 			<div class="modal-body">
-				<p>Producto <span th:text="${nuevo}"></span> agregado con exito.</p>
+				<p>Caso <span th:text="${nuevo}"></span> agregado con exito.</p>
 			</div>
 			<div class="modal-footer">
 			
@@ -120,7 +109,7 @@
 				<h5 class="modal-title" th:text="${error}"></h5>
 			</div>
 			<div class="modal-body">
-				<p>Error al guardar el producto  <span th:text="${nuevo}"></span></p>
+				<p>Error al guardar el Caso  <span th:text="${nuevo}"></span></p>
 			</div>
 			<div class="modal-footer">
 				<button id="btnCerrarError" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -140,4 +129,4 @@ $("#btnCerrarError").click(function(){
 })
 
 </script>
-<div th:replace="/Menu :: js"></div>
+<div th:replace="/Shared :: js"></div>
