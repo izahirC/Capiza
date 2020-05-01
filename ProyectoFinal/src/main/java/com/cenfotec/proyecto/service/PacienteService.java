@@ -13,6 +13,6 @@ public interface PacienteService {
 	public List<Paciente> getAllPacientes();
 	public Optional<Paciente> getById(String id);
 	public void deleteById(String id);
-	
+	public Paciente getByCedula(String cedula);
 	
 }

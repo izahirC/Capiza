@@ -15,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 public class Paciente {
 
 		private String id;
+		private String cedula;
 	    private String nombre;
 	    private String apellido;
 	    private Date fechaNacimiento; 
@@ -50,6 +51,16 @@ public class Paciente {
 	    public void setId(String id) {
 	        this.id = id;
 	    }
+	    
+	    @DynamoDBAttribute
+	    public String getCedula() {
+	        return cedula;
+	    }
+
+	    public void setCedula(String cedula) {
+	        this.cedula = cedula;
+	    }
+	    
 
 	    @DynamoDBAttribute
 	    public String getNombre() {
