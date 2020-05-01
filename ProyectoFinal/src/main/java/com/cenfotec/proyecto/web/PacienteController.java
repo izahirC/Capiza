@@ -1,6 +1,7 @@
 package com.cenfotec.proyecto.web;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -51,15 +52,6 @@ public class PacienteController {
 	@Autowired
 	AmazonDynamoDB amazonDynamoDB;
 
-//	@Autowired
-//	PacienteRepository pacienteRepository;
-//	@Autowired
-//	CasoRepository casoRepository;
-//	@Autowired
-//	ClinicaRepository clinicaRepository;
-//	@Autowired
-//	EnfermedadRepository enfermedadRepository;
-//	
 	@Autowired
 	CasoServiceImpl casoService;
 	@Autowired
@@ -99,12 +91,12 @@ public class PacienteController {
 	 * awsServiceObject : awsServices) { // System.out.print("List object: " + new
 	 * Gson().toJson(awsServiceObject)); // } return "index"; }
 	 */
-	
+
 	/*
 	 * @GetMapping("/paciente") public String mostrarFormularioPaciente(Model model)
 	 * { model.addAttribute("paciente", new Paciente()); return "paciente"; }
 	 */
-	
+
 	/*
 	 * @GetMapping("/caso") public String mostrarFormularioCaso(Model model) {
 	 * model.addAttribute("caso", new Caso()); model.addAttribute("clinica", new
@@ -120,26 +112,7 @@ public class PacienteController {
 	 * @GetMapping("/clinica") public String mostrarFormularioClinica(Model model) {
 	 * model.addAttribute("clinica", new Clinica()); return "clinica"; }
 	 */
-	
-	@RequestMapping("/paciente")
-	public Paciente guardarPaciente(@RequestBody Paciente nuevoPaciente) {
-		return pacienteService.savePaciente(nuevoPaciente);
-		 
-	}
-	@RequestMapping("/index")
-	public Caso guardarCaso(@RequestBody Caso nuevoCaso) {
-		return casoService.saveCaso(nuevoCaso);
-		 
-	}
-	@RequestMapping("/nuevoProducto")
-	public Enfermedad guardarEnfermedad(@RequestBody Enfermedad nuevaEnfermedad) {
-		return enfermedadService.saveEnfermedad(nuevaEnfermedad);
-		
-	}
-	@RequestMapping("/listaProductos")
-	public Clinica guardarClinica(@RequestBody Clinica nuevaClinica) {
-		return clinicaService.saveClinica(nuevaClinica);
-	}	 
+
 	@RequestMapping("/")
 	public String index(Model model) throws ParseException {
 
@@ -147,56 +120,45 @@ public class PacienteController {
 
 		// ConectarTabla(casoNuevo);
 
-		Optional<Paciente> p=pacienteService.getById("12045fef-b3a0-4248-af6f-eeb46983c688");
+		Optional<Paciente> p = pacienteService.getById("12045fef-b3a0-4248-af6f-eeb46983c688");
 		casoNuevo.setClinica("Clinica");
 		casoNuevo.setEnfermedad("enfermedad");
 		casoNuevo.setSintomas("Sintomas");
-		//casoNuevo.setPaciente(p.get());
-
-		
-		casoNuevo= casoService.saveCaso(casoNuevo);
-		// pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);
-
-//
+		// casoNuevo.setPaciente(p.get());
+		casoNuevo = casoService.saveCaso(casoNuevo);
+		// pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);//
 //		String awsServiceId = pacienteNuevo.getId();
-//
-//
-//
 //		Optional<Paciente> awsServiceQueried = pacienteService.getById(awsServiceId);
-//
 //		if (awsServiceQueried.get() != null) {
 //			System.out.print("Queried object: " + new Gson().toJson(awsServiceQueried.get()));
 //		}
-//
 //		Iterable<Paciente> awsServices = pacienteRepository.findAll();
-//
 //		for (Paciente awsServiceObject : awsServices) {
 //			System.out.print("List object: " + new Gson().toJson(awsServiceObject));
 //		}
 		return "index";
 	}
 
+	@RequestMapping(value = "/paciente/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Paciente> obtenerPacientes(Model model) {
+		return pacienteService.getAllPacientes();
+	}
 
-	@RequestMapping(value="/paciente/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Paciente> obtenerPacientes(Model model){		
-		return pacienteService.getAllPacientes(); 	
+	@RequestMapping(value = "/caso/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Caso> obtenerCasos(Model model) {
+		return casoService.getAllCasos();
 	}
-	
-	@RequestMapping(value="/caso/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Caso> obtenerCasos(Model model){		
-		return casoService.getAllCasos(); 	
+
+	@RequestMapping(value = "/enfermedad/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Enfermedad> obtenerEnfermedades(Model model) {
+		return enfermedadService.getAllEnfermedades();
 	}
-	
-	@RequestMapping(value="/enfermedad/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Enfermedad> obtenerEnfermedades(Model model){		
-		return enfermedadService.getAllEnfermedades(); 	
+
+	@RequestMapping(value = "/clinica/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Clinica> obtenerClinicas(Model model) {
+		return clinicaService.getAllClinicas();
 	}
-	
-	@RequestMapping(value="/clinica/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Clinica> obtenerClinicas(Model model){		
-		return clinicaService.getAllClinicas(); 	
-	}
-	
+
 	@PutMapping(value = "/paciente/{id}")
 	public ResponseEntity<Paciente> updatePaciente(@PathVariable("id") String id, @RequestBody Paciente paciente) {
 		return pacienteService.getById(id).map(record -> {
@@ -208,7 +170,7 @@ public class PacienteController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@PutMapping(value = "/caso/{id}")
 	public ResponseEntity<Caso> updateCaso(@PathVariable("id") String id, @RequestBody Caso caso) {
 		return casoService.getById(id).map(record -> {
@@ -219,9 +181,10 @@ public class PacienteController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@PutMapping(value = "/enfermedad/{id}")
-	public ResponseEntity<Enfermedad> updateEnfermedad(@PathVariable("id") String id, @RequestBody Enfermedad enfermedad) {
+	public ResponseEntity<Enfermedad> updateEnfermedad(@PathVariable("id") String id,
+			@RequestBody Enfermedad enfermedad) {
 		return enfermedadService.getById(id).map(record -> {
 			record.setTipo(enfermedad.getTipo());
 			record.setMedicamento(enfermedad.getMedicamento());
@@ -229,7 +192,7 @@ public class PacienteController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@PutMapping(value = "/clinica/{id}")
 	public ResponseEntity<Clinica> updateClinica(@PathVariable("id") String id, @RequestBody Clinica clinica) {
 		return clinicaService.getById(id).map(record -> {
@@ -246,7 +209,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@DeleteMapping(path = { "/caso/{id}" })
 	public ResponseEntity<?> deleteCaso(@PathVariable("id") String id) {
 		return casoService.getById(id).map(record -> {
@@ -254,7 +217,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@DeleteMapping(path = { "/enfermedad/{id}" })
 	public ResponseEntity<?> deleteEnfermedad(@PathVariable("id") String id) {
 		return enfermedadService.getById(id).map(record -> {
@@ -262,7 +225,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@DeleteMapping(path = { "/clinica/{id}" })
 	public ResponseEntity<?> deleteClinica(@PathVariable("id") String id) {
 		return clinicaService.getById(id).map(record -> {
@@ -270,7 +233,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@RequestMapping("/nuevoCaso")
 	public String nuevoCaso(Model model) throws ParseException {
 		Caso nCaso = new Caso();
@@ -285,6 +248,75 @@ public class PacienteController {
 
 		return "nuevoCaso";
 	}
+
+	@RequestMapping("/paciente")
+	public String nuevoPaciente(Model model) throws ParseException {
+		Paciente nPaciente = new Paciente();
+		model.addAttribute("paciente", nPaciente);
+
+		return "paciente";
+	}
+
+	@PostMapping("/addPaciente")
+	public String submit(Model model, @ModelAttribute Paciente nuevoPaciente, BindingResult result) {
+		if(!result.hasErrors()) {
+			Paciente nPaciente = new Paciente();
+			model.addAttribute("paciente", nPaciente);
+			nPaciente = nuevoPaciente;
+			nPaciente = pacienteService.savePaciente(nPaciente);
+			return "paciente";
+		}else {
+			Paciente  nPaciente = new Paciente();
+			model.addAttribute("error", "Error");
+		}
+		return "paciente";
+	}
+	
+	@RequestMapping("/clinica")
+	public String nuevaClinica(Model model) throws ParseException {
+		Clinica nClinica = new Clinica();
+		model.addAttribute("clinica", nClinica);
+		return "clinica";
+	}
+	
+	@PostMapping("/addClinica")
+	public String submit(Model model, @ModelAttribute Clinica nuevaClinica, BindingResult result) {
+		if(!result.hasErrors()) {
+			Clinica nClinica = new Clinica();
+			model.addAttribute("clinica", nClinica);
+			nClinica = nuevaClinica;
+			nClinica = clinicaService.saveClinica(nClinica);
+			return "clinica";
+		}else {
+			Clinica nClinica = new Clinica();
+			model.addAttribute("clinica", nClinica);
+			model.addAttribute("error", "Error");
+		}
+		return "clinica";
+	}
+	
+	@RequestMapping("/enfermedad")
+	public String nuevaEnfermedad(Model model) throws ParseException {
+		Enfermedad nEnfermedad = new Enfermedad();
+		model.addAttribute("enfermedad", nEnfermedad);
+		return "enfermedad";
+	}
+	
+	@PostMapping("/addEnfermedad")
+	public String submit(Model model, @ModelAttribute Enfermedad nuevaEnfermedad, BindingResult result) {
+		if(!result.hasErrors()) {
+			Enfermedad nEnfermedad = new Enfermedad();
+			model.addAttribute("enfermedad", nEnfermedad);
+			nEnfermedad = nuevaEnfermedad;
+			nEnfermedad = enfermedadService.saveEnfermedad(nEnfermedad);
+			return "enfermedad";
+		}else {
+			Enfermedad nEnfermedad = new Enfermedad();
+			model.addAttribute("error", "Error");
+		}
+		return "enfermedad";
+	}
+	
 
 	@PostMapping("/addCaso")
 	public String submit(Model model, @ModelAttribute Caso caso, BindingResult result) {

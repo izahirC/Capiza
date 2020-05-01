@@ -1,10 +1,12 @@
-package com.cenfotec.examen;
+package com.cenfotec.proyecto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+
 
 @SpringBootTest
-class ExamenApplicationTests {
+class ProyectoFinalApplicationTests {
 
 	@Test
 	void contextLoads() {
