@@ -1,34 +1,163 @@
 <!doctype html>
 <html lang="en-US" xmlns:th="http://www.thymeleaf.org">
 <head>
-<div th:replace="/Shared :: header" ></div>
-<title>Producto</title>
+<div th:replace="/Shared :: header"></div>
+<title>Paciente</title>
 </head>
-<body >
-		
+<body>
 
-
-	<div class="row">
-	<div class="col-12">
-	
-		<div th:replace="/Shared :: menu" ></div>
-
-	</div>
-	</div>
 	<div class="row">
 		<div class="col-12">
-			<div class="jumbotron">
-				<h1 class="display-3"><img src="/img/logo.png"></img></h1>
-				<p class="lead">Su salud es nuestra prioridad.</p>
-				<hr class="my-4">
-				<p>Haga su consulta al numero xxxxxxxxx</p>
 
-			</div>
+			<div th:replace="/Shared :: menu"></div>
+
 		</div>
 
+
+	</div>
+	<div class="row">
+		<div class="col-4"></div>
+		<div class="col-4 mt-2 pt-3" style="background: aliceblue;">
+			<div class="col4">
+				<form id="formNPaciente" th:action="@{/addPaciente}"
+					th:object="${paciente}" method="post">
+					<fieldset>
+						<legend>Agregar Paciente</legend>
+						<div class="form-group has-success">
+							<label class="form-control-label" for="inputSuccess1">Identificacion</label>
+							<input required="required" th:field="*{cedula}" id="cedula"
+								type="text" value="" class="form-control"> <label
+								class="form-control-label" for="inputSuccess1">Nombre</label> <input
+								required="required" th:field="*{nombre}" id="nombre" type="text"
+								value="" class="form-control"> <label
+								class="form-control-label" for="inputSuccess1">Apellido</label>
+							<input required="required" th:field="*{apellido}" id="apellido"
+								type="text" value="" class="form-control">
+
+						</div>
+
+						<div class="row form-group">
+							<div class="col-6 form-group">
+								<label for="exampleSelect1">Fecha de nacimiento</label> <input
+									required="required" th:field="*{fechaNacimiento}"
+									id="fechaNacimiento" type="text" value="" class="form-control">
+							</div>
+
+							<div class="col-6 form-group">
+								<label class="form-control-label" for="inputSuccess1">Estado
+									Civil</label> <input required="required" th:field="*{estadoCivil}"
+									id="estadoCivil" type="text" value="" class="form-control">
+							</div>
+						</div>
+
+						<div class="row form-group">
+							<div class="col-6 form-group">
+								<label for="genero">Genero</label> <select th:field="*{genero}"
+									class="form-control" id="genero">
+									<option
+										th:each="colorOpt : ${T(com.cenfotec.proyecto.domain.Paciente.Genero).values()}"
+										value="1" th:text="${colorOpt}" th:value="${colorOpt}"></option>
+								</select>
+							</div>
+
+
+							<div class="col-6 form-group">
+								<label for="tipoSangre">Tipo Sangre</label> <select
+									th:field="*{tipoSangre}" class="form-control" id="tipoSangre">
+									<option
+										th:each="colorOpt : ${T(com.cenfotec.proyecto.domain.Paciente.TipoSangre).values()}"
+										value="1" th:text="${colorOpt}" th:value="${colorOpt}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row form-group">
+							<div class="col-6 form-group">
+								<label class="form-control-label" for="inputSuccess1">Ocupacion</label>
+								<input required="required" th:field="*{ocupacion}"
+									id="ocupacion" type="text" value="" class="form-control">
+								<label class="form-control-label" for="inputSuccess1">Direccion</label>
+								<input required="required" th:field="*{direccion}"
+									id="direccion" type="text" value="" class="form-control">
+							</div>
+
+							<div class="col-6 form-group">
+								<label class="form-control-label" for="inputSuccess1">Telefono</label>
+								<input required="required" th:field="*{telefono}" id="telefono"
+									type="number" value="" class="form-control">
+							</div>
+
+						</div>
+
+						<div class="form-group">
+							<div class="row" style="justify-content: center;">
+								<button type="submit" class="btn btn-primary m-2">Guardar</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="col-4"></div>
 	</div>
 
 
 
 </body>
-</html>
+
+<div id="mymodalExito" class="modal fade show"
+	th:each="entry,status : ${nuevo}" style="display: block; opacity: 1;"
+	tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Exitoso</h5>
+			</div>
+			<div class="modal-body">
+				<p>
+					Paciente <span th:text="${nuevo}"></span> agregado con exito.
+				</p>
+			</div>
+			<div class="modal-footer">
+
+				<button id="btnCerrarExito" type="button" class="btn btn-secondary"
+					data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="mymodalError" class="modal fade show"
+	th:each="entry,status : ${error}" style="display: block; opacity: 1;"
+	tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" th:text="${error}"></h5>
+			</div>
+			<div class="modal-body">
+				<p>
+					Error al guardar el paciente <span th:text="${nuevo}"></span>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button id="btnCerrarError" type="button" class="btn btn-secondary"
+					data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	$("#btnCerrarExito").click(function() {
+		$("#mymodalExito")[0].style.display = "";
+	})
+
+	$("#btnCerrarError").click(function() {
+		$("#mymodalError")[0].style.display = "";
+	})
+</script>
+
+<div th:replace="/Shared :: js"></div>

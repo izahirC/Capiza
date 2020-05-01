@@ -71,6 +71,7 @@ public class Paciente {
 	        this.nombre = nombre;
 	    }
 	    
+	    
 	    @DynamoDBAttribute
 	    public Date getFechaNacimiento() {
 	        return fechaNacimiento;

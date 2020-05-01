@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="/Shared :: header"></div>
+<title>Enfermedad</title>
+</head>
+<body>
+
+	<div class="row">
+		<div class="col-12">
+
+			<div th:replace="/Shared :: menu"></div>
+
+		</div>
+
+
+	</div>
+	<div class="row">
+		<div class="col-4"></div>
+		<div class="col-4 mt-2 pt-3" style="background: aliceblue;">
+			<div class="col4">
+				<form id="formNEnfermedad" th:action="@{/addEnfermedad}"
+					th:object="${enfermedad}" method="post">
+					<fieldset>
+						<legend>Agregar Enfermedad</legend>
+						<div class="form-group has-success">
+							<label class="form-control-label" for="inputSuccess1">Nombre</label>
+							<input required="required" th:field="*{nombre}" id="nombre"
+								type="text" value="" class="form-control">
+
+						</div>
+
+						<div class="row form-group">
+							<div class="col-6 form-group">
+								<label for="exampleSelect1">Tipo</label> <input
+									required="required" th:field="*{tipo}" id="tipo" type="text"
+									value="" class="form-control">
+							</div>
+
+							<div class="col-6 form-group">
+								<label for="exampleSelect1">Medicamentos</label> <input
+									required="required" th:field="*{medicamento}" id="tipo"
+									type="text" value="" class="form-control">
+							</div>
+						</div>
+						
+						<div class="form-group">
+
+							<div class="row" style="justify-content: center;">
+								<button type="submit" class="btn btn-primary m-2">Guardar</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="col-4"></div>
+	</div>
+
+
+
+</body>
+
+<div id="mymodalExito" class="modal fade show"
+	th:each="entry,status : ${nuevo}" style="display: block; opacity: 1;"
+	tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Exitoso</h5>
+			</div>
+			<div class="modal-body">
+				<p>
+					Clinica <span th:text="${nuevo}"></span> agregada con exito.
+				</p>
+			</div>
+			<div class="modal-footer">
+
+				<button id="btnCerrarExito" type="button" class="btn btn-secondary"
+					data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="mymodalError" class="modal fade show"
+	th:each="entry,status : ${error}" style="display: block; opacity: 1;"
+	tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" th:text="${error}"></h5>
+			</div>
+			<div class="modal-body">
+				<p>
+					Error al guardar la clinica <span th:text="${nuevo}"></span>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button id="btnCerrarError" type="button" class="btn btn-secondary"
+					data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	$("#btnCerrarExito").click(function() {
+		$("#mymodalExito")[0].style.display = "";
+	})
+
+	$("#btnCerrarError").click(function() {
+		$("#mymodalError")[0].style.display = "";
+	})
+</script>
+<div th:replace="/Shared :: js"></div>
