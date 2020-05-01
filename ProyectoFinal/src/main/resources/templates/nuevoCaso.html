@@ -2,6 +2,7 @@
 <html lang="en-US" xmlns:th="http://www.thymeleaf.org">
 <head>
 <div th:replace="/Shared :: header"></div>
+
 <title>Caso</title>
 </head>
 <body>
@@ -19,23 +20,40 @@
 		<div class="col-4"></div>
 		<div class="col-4 mt-2 pt-3" style="background: aliceblue;">
 			<div class="col4">
-				<form id="formNCaso" th:action="@{/addCaso}"
-					th:object="${caso}" method="post">
-					<fieldset>
-						<legend>Agregar Caso</legend>
-						<div class="form-group has-success">
-							<label class="form-control-label" for="inputSuccess1">Paciente</label>
-							<input required="required" th:field="*{paciente}" id="paciente"
-								type="text" value="" class="form-control">
 
+
+				<form id="formNCaso" th:action="@{/addCaso}" th:object="${caso}"
+					method="post">
+
+					<fieldset>
+						<legend>Paciente</legend>
+						<div class="row form-group">
+							<div class="col-9 form-group" th:object="${paciente}">
+								<label class="form-control-label" for="Cedula"><strong>Cedula</strong></label> <input
+									th:field="${paciente.cedula}" id="cedulaAValidar" type="text" value="" class="form-control">
+
+							</div>
+							<div class="col-3 form-group">
+								<button type="button" onclick="validarCliente()"
+									class="btn btn-outline-primary m-2">Buscar</button>
+							</div>
 						</div>
 
+						<div id="datosPaciente"></div>
+					</fieldset>
+					<div class="progress">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 100%;"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					<fieldset>
+						
+						<legend>Caso</legend>
 
 
 
 						<div class="row form-group">
 							<div class="col-6 form-group">
-								<label for="exampleSelect1">Enfermedad</label> <select
+								<label for="exampleSelect1"><strong>Enfermedad</strong></label> <select
 									th:field="*{enfermedad}" class="form-control" id="enfermedad">
 									<option th:each="entry,status : ${enfermedades}" value="1"
 										th:text="${entry.nombre}" th:value="${entry.id}"></option>
@@ -45,7 +63,7 @@
 
 
 							<div class="col-6 form-group">
-								<label for="exampleSelect1">Clinica</label> <select
+								<label for="exampleSelect1"> <strong>Clinica </strong></label> <select
 									th:field="*{clinica}" class="form-control" id="clinica">
 									<option th:each="entry,status : ${clinicas}" value="1"
 										th:text="${entry.nombre}" th:value="${entry.id}"></option>
@@ -56,63 +74,69 @@
 
 
 
-
 						<div class="row form-group">
-							<div class="col-6">
-								<label class="form-control-label" for="inputSuccess1">Sintomas</label> <input required="required"
-									 type="text" value=""
-									th:field="*{sintomas}" class="form-control"
-									id="inputValid">
-
+							<div class="col-12 form-group">
+								<label class="form-control-label" for="inputSuccess1"><strong>Sintomas</strong></label>
+								<textarea required="required" th:field="*{sintomas}"
+									class="form-control" id="inputValid"></textarea>
 							</div>
+
 						</div>
 
 						<div class="row" style="justify-content: center;">
-						<button type="submit" class="btn btn-primary m-2">Guardar</button>
+							<button type="submit" class="btn btn-success m-3">Guardar</button>
 						</div>
-						
+
 					</fieldset>
 				</form>
 			</div>
 		</div>
 		<div class="col-4"></div>
 	</div>
-	
-	
-	
+
+
+
 </body>
 
-<div id="mymodalExito" class="modal fade show" th:each="entry,status : ${nuevo}"
-	style="display: block; opacity: 1;" tabindex="-1" role="dialog">
+<div id="mymodalExito" class="modal fade show"
+	th:each="entry,status : ${nuevo}" style="display: block; opacity: 1;"
+	tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" >Exitoso</h5>
+				<h5 class="modal-title">Exitoso</h5>
 			</div>
 			<div class="modal-body">
-				<p>Caso <span th:text="${nuevo}"></span> agregado con exito.</p>
+				<p>
+					Caso <span th:text="${nuevo}"></span> agregado con exito.
+				</p>
 			</div>
 			<div class="modal-footer">
-			
-				<button id="btnCerrarExito" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+				<button id="btnCerrarExito" type="button" class="btn btn-secondary"
+					data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-<div id="mymodalError" class="modal fade show" th:each="entry,status : ${error}"
-	style="display: block; opacity: 1;" tabindex="-1" role="dialog">
+<div id="mymodalError" class="modal fade show"
+	th:each="entry,status : ${error}" style="display: block; opacity: 1;"
+	tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" th:text="${error}"></h5>
 			</div>
 			<div class="modal-body">
-				<p>Error al guardar el Caso  <span th:text="${nuevo}"></span></p>
+				<p>
+					Error al guardar el Caso <span th:text="${nuevo}"></span>
+				</p>
 			</div>
 			<div class="modal-footer">
-				<button id="btnCerrarError" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button id="btnCerrarError" type="button" class="btn btn-secondary"
+					data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -120,13 +144,12 @@
 
 
 <script>
-$("#btnCerrarExito").click(function(){
-	$("#mymodalExito")[0].style.display="";
-})
+	$("#btnCerrarExito").click(function() {
+		$("#mymodalExito")[0].style.display = "";
+	})
 
-$("#btnCerrarError").click(function(){
-	$("#mymodalError")[0].style.display="";
-})
-
+	$("#btnCerrarError").click(function() {
+		$("#mymodalError")[0].style.display = "";
+	})
 </script>
 <div th:replace="/Shared :: js"></div>

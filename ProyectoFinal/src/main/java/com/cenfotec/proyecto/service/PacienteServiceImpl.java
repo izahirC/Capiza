@@ -40,4 +40,16 @@ public class PacienteServiceImpl implements PacienteService {
 			
 	}
 
+	@Override
+	public Paciente getByCedula(String cedula) {
+		List<Paciente> listaPacientes = getAllPacientes();
+		Paciente miPaciente= new Paciente();
+		for(Paciente paciente : listaPacientes) {
+			if(paciente.getCedula()!=null && paciente.getCedula().equals(cedula)) {
+				miPaciente= paciente;
+			}
+		}
+		return miPaciente;
+	}
+
 }

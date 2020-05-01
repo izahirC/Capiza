@@ -51,6 +51,16 @@ public class Paciente {
 	    public void setId(String id) {
 	        this.id = id;
 	    }
+	    
+	    @DynamoDBAttribute
+	    public String getCedula() {
+	        return cedula;
+	    }
+
+	    public void setCedula(String cedula) {
+	        this.cedula = cedula;
+	    }
+	    
 
 	    @DynamoDBAttribute
 	    public String getNombre() {
@@ -61,14 +71,6 @@ public class Paciente {
 	        this.nombre = nombre;
 	    }
 	    
-	    @DynamoDBAttribute
-	    public String getCedula() {
-	        return cedula;
-	    }
-
-	    public void setCedula(String cedula) {
-	        this.cedula = cedula;
-	    }
 	    
 	    @DynamoDBAttribute
 	    public Date getFechaNacimiento() {

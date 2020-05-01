@@ -239,7 +239,8 @@ public class PacienteController {
 		Caso nCaso = new Caso();
 		model.addAttribute("caso", nCaso);
 		// para realizar el Dropdown
-
+		Paciente paciente= new Paciente();
+		model.addAttribute("paciente", paciente);
 		List<Enfermedad> listaEnfermedades = enfermedadService.getAllEnfermedades();
 		model.addAttribute("enfermedades", listaEnfermedades);
 
@@ -319,8 +320,12 @@ public class PacienteController {
 	
 
 	@PostMapping("/addCaso")
-	public String submit(Model model, @ModelAttribute Caso caso, BindingResult result) {
+	public String submit(Model model, @ModelAttribute Caso caso,@ModelAttribute Paciente paciente, BindingResult result) {
 		if (!result.hasErrors()) {
+			Paciente miPaciente= new Paciente();
+			miPaciente=paciente;
+			miPaciente=pacienteService.savePaciente(miPaciente);
+			caso.setPaciente(miPaciente.getId());
 			casoService.saveCaso(caso);
 			Caso nCaso = new Caso();
 			model.addAttribute("caso", nCaso);
@@ -332,7 +337,7 @@ public class PacienteController {
 			List<Clinica> listaClinicas = clinicaService.getAllClinicas();
 			model.addAttribute("clinicas", listaClinicas);
 			model.addAttribute("nuevo", caso.getId());
-			return "nuevoProducto";
+			return "nuevoCaso";
 		} else {
 
 			Caso nCaso = new Caso();
@@ -345,11 +350,23 @@ public class PacienteController {
 			List<Clinica> listaClinicas = clinicaService.getAllClinicas();
 			model.addAttribute("clinicas", listaClinicas);
 			model.addAttribute("error", "Error");
-			return "nuevoProducto";
+			return "nuevoCaso";
 		}
 
 	}
+	
+	@RequestMapping("/pacientePorCedula/{cedula}")
+	public String submit(Model model, @PathVariable("cedula") String cedula) {
+			Paciente paciente= new Paciente();
+			paciente=pacienteService.getByCedula(cedula);
+			
 
+			model.addAttribute("paciente", paciente);
+
+			return "Shared :: casoPaciente";
+		
+
+	}
 	public void ConectarTabla(Object entidad) {
 
 		dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
