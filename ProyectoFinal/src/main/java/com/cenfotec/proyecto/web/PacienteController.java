@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -99,12 +100,12 @@ public class PacienteController {
 	 * awsServiceObject : awsServices) { // System.out.print("List object: " + new
 	 * Gson().toJson(awsServiceObject)); // } return "index"; }
 	 */
-	
+
 	/*
 	 * @GetMapping("/paciente") public String mostrarFormularioPaciente(Model model)
 	 * { model.addAttribute("paciente", new Paciente()); return "paciente"; }
 	 */
-	
+
 	/*
 	 * @GetMapping("/caso") public String mostrarFormularioCaso(Model model) {
 	 * model.addAttribute("caso", new Caso()); model.addAttribute("clinica", new
@@ -120,26 +121,30 @@ public class PacienteController {
 	 * @GetMapping("/clinica") public String mostrarFormularioClinica(Model model) {
 	 * model.addAttribute("clinica", new Clinica()); return "clinica"; }
 	 */
-	
+
 	@RequestMapping("/paciente")
 	public Paciente guardarPaciente(@RequestBody Paciente nuevoPaciente) {
 		return pacienteService.savePaciente(nuevoPaciente);
-		 
+
 	}
+
 	@RequestMapping("/index")
 	public Caso guardarCaso(@RequestBody Caso nuevoCaso) {
 		return casoService.saveCaso(nuevoCaso);
-		 
+
 	}
+
 	@RequestMapping("/nuevoProducto")
 	public Enfermedad guardarEnfermedad(@RequestBody Enfermedad nuevaEnfermedad) {
 		return enfermedadService.saveEnfermedad(nuevaEnfermedad);
-		
+
 	}
+
 	@RequestMapping("/listaProductos")
 	public Clinica guardarClinica(@RequestBody Clinica nuevaClinica) {
 		return clinicaService.saveClinica(nuevaClinica);
-	}	 
+	}
+
 	@RequestMapping("/")
 	public String index(Model model) throws ParseException {
 
@@ -147,18 +152,7 @@ public class PacienteController {
 
 		// ConectarTabla(casoNuevo);
 
-		Optional<Paciente> p=pacienteService.getById("12045fef-b3a0-4248-af6f-eeb46983c688");
-		casoNuevo.setClinica("Clinica");
-		casoNuevo.setEnfermedad("enfermedad");
-		casoNuevo.setSintomas("Sintomas");
-		//casoNuevo.setPaciente(p.get());
-
 		
-		casoNuevo= casoService.saveCaso(casoNuevo);
-		// pacienteNuevo = pacienteService.savePaciente(pacienteNuevo);
-
-//
-//		String awsServiceId = pacienteNuevo.getId();
 //
 //
 //
@@ -176,27 +170,26 @@ public class PacienteController {
 		return "index";
 	}
 
+	@RequestMapping(value = "/paciente/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Paciente> obtenerPacientes(Model model) {
+		return pacienteService.getAllPacientes();
+	}
 
-	@RequestMapping(value="/paciente/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Paciente> obtenerPacientes(Model model){		
-		return pacienteService.getAllPacientes(); 	
+	@RequestMapping(value = "/caso/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Caso> obtenerCasos(Model model) {
+		return casoService.getAllCasos();
 	}
-	
-	@RequestMapping(value="/caso/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Caso> obtenerCasos(Model model){		
-		return casoService.getAllCasos(); 	
+
+	@RequestMapping(value = "/enfermedad/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Enfermedad> obtenerEnfermedades(Model model) {
+		return enfermedadService.getAllEnfermedades();
 	}
-	
-	@RequestMapping(value="/enfermedad/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Enfermedad> obtenerEnfermedades(Model model){		
-		return enfermedadService.getAllEnfermedades(); 	
+
+	@RequestMapping(value = "/clinica/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Clinica> obtenerClinicas(Model model) {
+		return clinicaService.getAllClinicas();
 	}
-	
-	@RequestMapping(value="/clinica/all", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE) 
-	public @ResponseBody List<Clinica> obtenerClinicas(Model model){		
-		return clinicaService.getAllClinicas(); 	
-	}
-	
+
 	@PutMapping(value = "/paciente/{id}")
 	public ResponseEntity<Paciente> updatePaciente(@PathVariable("id") String id, @RequestBody Paciente paciente) {
 		return pacienteService.getById(id).map(record -> {
@@ -208,7 +201,7 @@ public class PacienteController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@PutMapping(value = "/caso/{id}")
 	public ResponseEntity<Caso> updateCaso(@PathVariable("id") String id, @RequestBody Caso caso) {
 		return casoService.getById(id).map(record -> {
@@ -219,9 +212,10 @@ public class PacienteController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@PutMapping(value = "/enfermedad/{id}")
-	public ResponseEntity<Enfermedad> updateEnfermedad(@PathVariable("id") String id, @RequestBody Enfermedad enfermedad) {
+	public ResponseEntity<Enfermedad> updateEnfermedad(@PathVariable("id") String id,
+			@RequestBody Enfermedad enfermedad) {
 		return enfermedadService.getById(id).map(record -> {
 			record.setTipo(enfermedad.getTipo());
 			record.setMedicamento(enfermedad.getMedicamento());
@@ -229,7 +223,7 @@ public class PacienteController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@PutMapping(value = "/clinica/{id}")
 	public ResponseEntity<Clinica> updateClinica(@PathVariable("id") String id, @RequestBody Clinica clinica) {
 		return clinicaService.getById(id).map(record -> {
@@ -246,7 +240,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@DeleteMapping(path = { "/caso/{id}" })
 	public ResponseEntity<?> deleteCaso(@PathVariable("id") String id) {
 		return casoService.getById(id).map(record -> {
@@ -254,7 +248,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@DeleteMapping(path = { "/enfermedad/{id}" })
 	public ResponseEntity<?> deleteEnfermedad(@PathVariable("id") String id) {
 		return enfermedadService.getById(id).map(record -> {
@@ -262,7 +256,7 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@DeleteMapping(path = { "/clinica/{id}" })
 	public ResponseEntity<?> deleteClinica(@PathVariable("id") String id) {
 		return clinicaService.getById(id).map(record -> {
@@ -270,13 +264,13 @@ public class PacienteController {
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@RequestMapping("/nuevoCaso")
 	public String nuevoCaso(Model model) throws ParseException {
 		Caso nCaso = new Caso();
 		model.addAttribute("caso", nCaso);
 		// para realizar el Dropdown
-		Paciente paciente= new Paciente();
+		Paciente paciente = new Paciente();
 		model.addAttribute("paciente", paciente);
 		List<Enfermedad> listaEnfermedades = enfermedadService.getAllEnfermedades();
 		model.addAttribute("enfermedades", listaEnfermedades);
@@ -288,12 +282,14 @@ public class PacienteController {
 	}
 
 	@PostMapping("/addCaso")
-	public String submit(Model model, @ModelAttribute Caso caso,@ModelAttribute Paciente paciente, BindingResult result) {
+	public String submit(Model model, @ModelAttribute Caso caso, @ModelAttribute Paciente paciente,
+			BindingResult result) {
 		if (!result.hasErrors()) {
-			Paciente miPaciente= new Paciente();
-			miPaciente=paciente;
-			miPaciente=pacienteService.savePaciente(miPaciente);
+			Paciente miPaciente = new Paciente();
+			miPaciente = paciente;
+			miPaciente = pacienteService.savePaciente(miPaciente);
 			caso.setPaciente(miPaciente.getId());
+			caso.setEstado(Caso.Estado.OBSERVACION);
 			casoService.saveCaso(caso);
 			Caso nCaso = new Caso();
 			model.addAttribute("caso", nCaso);
@@ -322,17 +318,128 @@ public class PacienteController {
 		}
 
 	}
+
+	@RequestMapping("/listaCasos")
+	public String listaCaso(Model model) throws ParseException {
+		List<Caso> casos = casoService.getAllCasos();
+		Optional<Paciente> paciente = null;
+		Optional<Clinica> clinica = null;
+		Optional<Enfermedad> enfermedad = null;
+		for (Caso caso : casos) {
+
+			if(caso.getPaciente()!=null) {
+				paciente = pacienteService.getById(caso.getPaciente());
+			}else {
+				
+			}
+			
+			if(caso.getClinica()!=null) {
+				clinica = clinicaService.getById(caso.getClinica());
+			}
+			if(caso.getEnfermedad()!=null) {
+				enfermedad = enfermedadService.getById(caso.getEnfermedad());
+			}
+			if (!clinica.isPresent()) {
+				Clinica clinicaNula = new Clinica();
+				clinicaNula.setNombre("Sin Asignar");
+				caso.setMiClinica(clinicaNula);
+			} else {
+				caso.setMiClinica(clinica.get());
+			}
+
+			if (!enfermedad.isPresent()) {
+				Enfermedad enfermedadNula = new Enfermedad();
+				enfermedadNula.setNombre("Sin Asignar");
+				caso.setMiEnfermedad(enfermedadNula);
+			} else {
+				caso.setMiEnfermedad(enfermedad.get());
+			}
+
+			if (!paciente.isPresent()) {
+				Paciente pacienteNula = new Paciente();
+				pacienteNula.setNombre("ANONIMO");
+				pacienteNula.setApellido("");
+				caso.setMiPaciente(pacienteNula);
+			} else {
+				caso.setMiPaciente(paciente.get());
+			}
+
+		}
+		Caso caso=new Caso();
+		model.addAttribute("casos", casos);
+		model.addAttribute("caso", caso);
+
+		return "listaCasos";
+
+	}
 	
-	@RequestMapping("/pacientePorCedula/{cedula}")
-	public String submit(Model model, @PathVariable("cedula") String cedula) {
-			Paciente paciente= new Paciente();
-			paciente=pacienteService.getByCedula(cedula);
+	@RequestMapping(value="/actualizarEstado/{id}", method = RequestMethod.GET)
+	public RedirectView actualizarEstado(Model model,@ModelAttribute Caso caso,@PathVariable("id") String id) throws ParseException {
+		
+
+		Optional<Caso> nuevoCaso=casoService.getById(caso.getId());
+		if(nuevoCaso.isPresent()) {
+			nuevoCaso.get().setEstado(caso.getEstado());
+			casoService.saveCaso(nuevoCaso.get());
+		}
+		
+		List<Caso> casos = casoService.getAllCasos();
+		Optional<Paciente> paciente = null;
+		Optional<Clinica> clinica = null;
+		Optional<Enfermedad> enfermedad = null;
+		for (Caso pcaso : casos) {
+			if(pcaso.getPaciente()!=null) {
+				paciente = pacienteService.getById(pcaso.getPaciente());
+			}
+			if(pcaso.getClinica()!=null) {
+				clinica = clinicaService.getById(pcaso.getClinica());
+			}
+			if(pcaso.getEnfermedad()!=null) {
+				enfermedad = enfermedadService.getById(pcaso.getEnfermedad());
+			}
+			
 			
 
-			model.addAttribute("paciente", paciente);
+			if (!clinica.isPresent()) {
+				Clinica clinicaNula = new Clinica();
+				clinicaNula.setNombre("Sin Asignar");
+				pcaso.setMiClinica(clinicaNula);
+			} else {
+				pcaso.setMiClinica(clinica.get());
+			}
 
-			return "Shared :: casoPaciente";
-		
+			if (!enfermedad.isPresent()) {
+				Enfermedad enfermedadNula = new Enfermedad();
+				enfermedadNula.setNombre("Sin Asignar");
+				pcaso.setMiEnfermedad(enfermedadNula);
+			} else {
+				pcaso.setMiEnfermedad(enfermedad.get());
+			}
+
+			if (!paciente.isPresent()) {
+				Paciente pacienteNula = new Paciente();
+				pacienteNula.setNombre("ANONIMO");
+				pacienteNula.setApellido("");
+				pcaso.setMiPaciente(pacienteNula);
+			} else {
+				pcaso.setMiPaciente(paciente.get());
+			}
+
+		}
+		model.addAttribute("casos", casos);
+
+		return new RedirectView("/listaCasos");
+
+	}
+
+	@RequestMapping("/pacientePorCedula/{cedula}")
+	public String submit(Model model, @PathVariable("cedula") String cedula) {
+		Paciente paciente = new Paciente();
+		paciente = pacienteService.getByCedula(cedula);
+
+		model.addAttribute("paciente", paciente);
+
+		return "Shared :: casoPaciente";
 
 	}
 
