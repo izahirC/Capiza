@@ -46,7 +46,7 @@ import com.cenfotec.proyecto.service.PacienteServiceImpl;
 import com.google.gson.Gson;
 
 @Controller
-public class PacienteController {
+public class HomeController {
 	DynamoDBMapper dynamoDBMapper;
 
 	@Autowired
@@ -122,11 +122,11 @@ public class PacienteController {
 	 * model.addAttribute("clinica", new Clinica()); return "clinica"; }
 	 */
 
-	@RequestMapping("/paciente")
-	public Paciente guardarPaciente(@RequestBody Paciente nuevoPaciente) {
-		return pacienteService.savePaciente(nuevoPaciente);
-
-	}
+//	@RequestMapping("/paciente")
+//	public Paciente guardarPaciente(@RequestBody Paciente nuevoPaciente) {
+//		return pacienteService.savePaciente(nuevoPaciente);
+//
+//	}
 
 	@RequestMapping("/index")
 	public Caso guardarCaso(@RequestBody Caso nuevoCaso) {
@@ -152,7 +152,6 @@ public class PacienteController {
 
 		// ConectarTabla(casoNuevo);
 
-		
 //
 //
 //
@@ -280,6 +279,73 @@ public class PacienteController {
 
 		return "nuevoCaso";
 	}
+	@RequestMapping("/paciente")
+ 	public String nuevoPaciente(Model model) throws ParseException {
+ 		Paciente nPaciente = new Paciente();
+ 		model.addAttribute("paciente", nPaciente);
+ 
+ 		return "paciente";
+ 	}
+ 
+ 	@PostMapping("/addPaciente")
+ 	public String nuevoPaciente(Model model, @ModelAttribute Paciente nuevoPaciente, BindingResult result) {
+ 		if(!result.hasErrors()) {
+ 			Paciente nPaciente = new Paciente();
+ 			model.addAttribute("paciente", nPaciente);
+ 			nPaciente = nuevoPaciente;
+ 			nPaciente = pacienteService.savePaciente(nPaciente);
+ 			return "paciente";
+ 		}else {
+ 			Paciente  nPaciente = new Paciente();
+ 			model.addAttribute("error", "Error");
+ 		}
+ 		return "paciente";
+ 	}
+
+	@RequestMapping("/clinica")
+	public String nuevaClinica(Model model) throws ParseException {
+		Clinica nClinica = new Clinica();
+		model.addAttribute("clinica", nClinica);
+		return "clinica";
+	}
+
+	@PostMapping("/addClinica")
+	public String submit(Model model, @ModelAttribute Clinica nuevaClinica, BindingResult result) {
+		if (!result.hasErrors()) {
+			Clinica nClinica = new Clinica();
+			model.addAttribute("clinica", nClinica);
+			nClinica = nuevaClinica;
+			nClinica = clinicaService.saveClinica(nClinica);
+			return "clinica";
+		} else {
+			Clinica nClinica = new Clinica();
+			model.addAttribute("clinica", nClinica);
+			model.addAttribute("error", "Error");
+		}
+		return "clinica";
+	}
+
+	@RequestMapping("/enfermedad")
+	public String nuevaEnfermedad(Model model) throws ParseException {
+		Enfermedad nEnfermedad = new Enfermedad();
+		model.addAttribute("enfermedad", nEnfermedad);
+		return "enfermedad";
+	}
+
+	@PostMapping("/addEnfermedad")
+	public String submit(Model model, @ModelAttribute Enfermedad nuevaEnfermedad, BindingResult result) {
+		if (!result.hasErrors()) {
+			Enfermedad nEnfermedad = new Enfermedad();
+			model.addAttribute("enfermedad", nEnfermedad);
+			nEnfermedad = nuevaEnfermedad;
+			nEnfermedad = enfermedadService.saveEnfermedad(nEnfermedad);
+			return "enfermedad";
+		} else {
+			Enfermedad nEnfermedad = new Enfermedad();
+			model.addAttribute("error", "Error");
+		}
+		return "enfermedad";
+	}
 
 	@PostMapping("/addCaso")
 	public RedirectView submit(Model model, @ModelAttribute Caso caso, @ModelAttribute Paciente paciente,
@@ -289,7 +355,7 @@ public class PacienteController {
 			miPaciente = paciente;
 			miPaciente = pacienteService.savePaciente(miPaciente);
 			caso.setPaciente(miPaciente.getId());
-			Caso d=new Caso();
+			Caso d = new Caso();
 			caso.setEstado(Caso.Estado.OBSERVACION);
 			casoService.saveCaso(caso);
 			Caso nCaso = new Caso();
@@ -328,16 +394,16 @@ public class PacienteController {
 		Optional<Enfermedad> enfermedad = null;
 		for (Caso caso : casos) {
 
-			if(caso.getPaciente()!=null) {
+			if (caso.getPaciente() != null) {
 				paciente = pacienteService.getById(caso.getPaciente());
-			}else {
-				
+			} else {
+
 			}
-			
-			if(caso.getClinica()!=null) {
+
+			if (caso.getClinica() != null) {
 				clinica = clinicaService.getById(caso.getClinica());
 			}
-			if(caso.getEnfermedad()!=null) {
+			if (caso.getEnfermedad() != null) {
 				enfermedad = enfermedadService.getById(caso.getEnfermedad());
 			}
 			if (!clinica.isPresent()) {
@@ -366,40 +432,38 @@ public class PacienteController {
 			}
 
 		}
-		Caso caso=new Caso();
+		Caso caso = new Caso();
 		model.addAttribute("casos", casos);
 		model.addAttribute("caso", caso);
 
 		return "listaCasos";
 
 	}
-	
-	@RequestMapping(value="/actualizarEstado/{id}", method = RequestMethod.GET)
-	public RedirectView actualizarEstado(Model model,@ModelAttribute Caso caso,@PathVariable("id") String id) throws ParseException {
-		
 
-		Optional<Caso> nuevoCaso=casoService.getById(caso.getId());
-		if(nuevoCaso.isPresent()) {
+	@RequestMapping(value = "/actualizarEstado/{id}", method = RequestMethod.GET)
+	public RedirectView actualizarEstado(Model model, @ModelAttribute Caso caso, @PathVariable("id") String id)
+			throws ParseException {
+
+		Optional<Caso> nuevoCaso = casoService.getById(caso.getId());
+		if (nuevoCaso.isPresent()) {
 			nuevoCaso.get().setEstado(caso.getEstado());
 			casoService.saveCaso(nuevoCaso.get());
 		}
-		
+
 		List<Caso> casos = casoService.getAllCasos();
 		Optional<Paciente> paciente = null;
 		Optional<Clinica> clinica = null;
 		Optional<Enfermedad> enfermedad = null;
 		for (Caso pcaso : casos) {
-			if(pcaso.getPaciente()!=null) {
+			if (pcaso.getPaciente() != null) {
 				paciente = pacienteService.getById(pcaso.getPaciente());
 			}
-			if(pcaso.getClinica()!=null) {
+			if (pcaso.getClinica() != null) {
 				clinica = clinicaService.getById(pcaso.getClinica());
 			}
-			if(pcaso.getEnfermedad()!=null) {
+			if (pcaso.getEnfermedad() != null) {
 				enfermedad = enfermedadService.getById(pcaso.getEnfermedad());
 			}
-			
-			
 
 			if (!clinica.isPresent()) {
 				Clinica clinicaNula = new Clinica();
