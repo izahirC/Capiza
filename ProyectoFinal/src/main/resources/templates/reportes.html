@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="Shared :: header"></div>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-flash-1.6.1/sl-1.3.1/datatables.min.css" />
+
+<script type="text/javascript"
+	src="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-flash-1.6.1/sl-1.3.1/datatables.min.js"></script>
+
+<!-- <link rel="stylesheet" type="text/css" -->
+<!-- 	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" /> -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css" />
+
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.bootstrap4.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+
+
+<script src="js/ProductoJs.js"></script>
+
+<title>Reportes</title>
+</head>
+<body>
+
+	<div class="row">
+		<div class="col-12">
+
+			<div th:replace="Shared :: menu"></div>
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="row p-4">
+				<div class="col-1">
+					
+						<button onclick="reporteCritico()"
+							class="btn btn-success my-2 my-sm-0" type="button">Criticos</button>
+					
+				</div>
+				<div class="col-1">
+					
+						<button onclick="reporteCerrado()"
+							class="btn btn-success my-2 my-sm-0" type="button">Cerrados</button>
+					
+				</div>
+			</div>
+
+
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+
+
+			<table id="table_id" class="display" style="width: 100%">
+				<thead>
+					<tr>
+
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+
+
+		</div>
+
+
+
+
+	</div>
+	<div class="row">
+		<div class="col-12"></div>
+
+	</div>
+
+
+	<script>
+		// 		$(document).ready(function() {
+		// 			var table = $('#tblProductos').DataTable({
+		// 				"bSort" : false,
+		// 				"searching" : false,
+		// 				"columns" : [ {
+		// 					
+		// 				}, {
+		// 					"data" : "nombre"
+		// 				}, {
+		// 					"data" : "calidad"
+		// 				}, {
+		// 					"data" : "cantidad_total"
+		// 				}, {
+		// 					"data" : "numero_cajas"
+		// 				} ],
+		// 				dom : 'Bfrtip',
+		// 				buttons : [ 'copy', 'csv', 'excel', 'pdf' ]
+		// 			});
+
+		// 			$(table.table().container()).removeClass('form-inline');
+		// 			$(table.table().container()).addClass('p-5');
+		// 			$("#tblProductos").removeClass();
+		// 			$("#tblProductos").addClass("table table-hover");
+		// 			$("#tblProductos tbody tr").each(function() {
+		// 				this.classList.add("table-primary")
+		// 			})
+
+		// 		});
+
+		function excel() {
+			$.ajax({
+				type : 'GET',
+				url : 'http://localhost:8081/reporteCriticos/',
+				dataType : 'json',
+				success : function(respose) {
+					$("#tmpFrame")
+							.attr('src', '/src/main/resources/static/img');
+				},
+				error : function(result) {
+					alert('error');
+				}
+			});
+		};
+	</script>
+</html>

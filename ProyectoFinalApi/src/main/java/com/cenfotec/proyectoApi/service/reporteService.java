@@ -13,6 +13,8 @@ public interface reporteService {
 	public Optional<Caso> getById(String id);
 	public void deleteById(String id);
 	public List<Caso> reporteCriticos();
+	public List<Caso> reporteCerrados();
+	public List<Caso> reporteMujeres();
 	
 	
 }

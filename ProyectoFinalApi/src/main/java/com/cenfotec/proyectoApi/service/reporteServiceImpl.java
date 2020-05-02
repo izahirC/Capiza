@@ -80,5 +80,59 @@ public class reporteServiceImpl implements reporteService {
 		}
 		return Criticos;
 	}
+	
+	@Override
+	public List<Caso> reporteCerrados() {
+		List<Caso> listaCasos = (List<Caso>) casoRepo.findAll();
+		List<Paciente> listaPacientes = (List<Paciente>) pacienteRepo.findAll();
+		List<Clinica> listaClinicas = (List<Clinica>) clinicaRepo.findAll();
+		List<Enfermedad> listaEnfermedades = (List<Enfermedad>) enfermedadRepo.findAll();
+		List<Caso> Cerrados=new ArrayList<>();
+		for (Caso caso : listaCasos) {
+			if (caso.getEstado() == Caso.Estado.CERRADO) {
+				Optional<Paciente> paciente=pacienteRepo.findById(caso.getPaciente());
+				if(paciente.isPresent()) {
+					caso.setMiPaciente(paciente.get());
+				}
+				Optional<Clinica> clinica=clinicaRepo.findById(caso.getClinica());
+				if(clinica.isPresent()) {
+					caso.setMiClinica(clinica.get());
+				}
+				Optional<Enfermedad> enfermedad=enfermedadRepo.findById(caso.getEnfermedad());
+				if(enfermedad.isPresent()) {
+					caso.setMiEnfermedad(enfermedad.get());
+				}
+				Cerrados.add(caso);
+			}
+		}
+		return Cerrados;
+	}
+	
+	@Override
+	public List<Caso> reporteMujeres() {
+		List<Caso> listaCasos = (List<Caso>) casoRepo.findAll();
+		List<Paciente> listaPacientes = (List<Paciente>) pacienteRepo.findAll();
+		List<Clinica> listaClinicas = (List<Clinica>) clinicaRepo.findAll();
+		List<Enfermedad> listaEnfermedades = (List<Enfermedad>) enfermedadRepo.findAll();
+		List<Caso> Mujeres=new ArrayList<>();
+		for (Caso caso : listaCasos) {
+			if (caso.getMiPaciente().getGenero() == Paciente.Genero.FEMENINO) {
+				Optional<Paciente> paciente=pacienteRepo.findById(caso.getPaciente());
+				if(paciente.isPresent()) {
+					caso.setMiPaciente(paciente.get());
+				}
+				Optional<Clinica> clinica=clinicaRepo.findById(caso.getClinica());
+				if(clinica.isPresent()) {
+					caso.setMiClinica(clinica.get());
+				}
+				Optional<Enfermedad> enfermedad=enfermedadRepo.findById(caso.getEnfermedad());
+				if(enfermedad.isPresent()) {
+					caso.setMiEnfermedad(enfermedad.get());
+				}
+				Mujeres.add(caso);
+			}
+		}
+		return Mujeres;
+	}
 
 }

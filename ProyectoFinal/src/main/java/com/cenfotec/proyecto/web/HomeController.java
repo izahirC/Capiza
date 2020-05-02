@@ -507,6 +507,15 @@ public class HomeController {
 		return "Shared :: casoPaciente";
 
 	}
+	
+	@RequestMapping("/reportes")
+	public String submit(Model model) {
+		
+
+
+		return "reportes";
+
+	}
 
 	public void ConectarTabla(Object entidad) {
 

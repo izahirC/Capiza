@@ -30,7 +30,7 @@ public class ApiController {
 	@Autowired
 	private reporteService reporteService;
 
-	@CrossOrigin(origins = "*")
+
 	@PostMapping("/producto")
 	public ResponseEntity<String> addColleague(@RequestBody Caso producto) {
 //		productoService.saveProducto(producto);
@@ -38,12 +38,20 @@ public class ApiController {
 		return null;
 	}
 
-
+	@CrossOrigin(origins = "http://localhost:5000")
 	@GetMapping("/reporteCriticos")
-	public List<Caso> getCasos() {
+	public List<Caso> getCasosCriticos() {
 		return reporteService.reporteCriticos();
 
 	}
+	
+	@CrossOrigin(origins = "http://localhost:5000")
+	@GetMapping("/reporteCerrados")
+	public List<Caso> getCasosCerrados() {
+		return reporteService.reporteCerrados();
+
+	}
+
 
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping("/productoPorBodego/{id}")
