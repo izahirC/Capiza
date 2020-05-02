@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-US" xmlns:th="http://www.thymeleaf.org">
 <head>
-<div th:replace="/Shared :: header"></div>
+<div th:replace="Shared :: header"></div>
 
 <title>Caso</title>
 </head>
@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="col-12">
 
-			<div th:replace="/Shared :: menu"></div>
+			<div th:replace="Shared :: menu"></div>
 
 		</div>
 
@@ -84,7 +84,7 @@
 						</div>
 
 						<div class="row" style="justify-content: center;">
-							<button type="submit" class="btn btn-success m-3">Guardar</button>
+							<button onclick="loading(this)" type="submit" class="btn btn-success m-3">Guardar</button>
 						</div>
 
 					</fieldset>
@@ -152,4 +152,4 @@
 		$("#mymodalError")[0].style.display = "";
 	})
 </script>
-<div th:replace="/Shared :: js"></div>
+<div th:replace="Shared :: js"></div>

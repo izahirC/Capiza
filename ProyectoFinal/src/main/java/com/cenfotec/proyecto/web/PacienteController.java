@@ -282,13 +282,14 @@ public class PacienteController {
 	}
 
 	@PostMapping("/addCaso")
-	public String submit(Model model, @ModelAttribute Caso caso, @ModelAttribute Paciente paciente,
+	public RedirectView submit(Model model, @ModelAttribute Caso caso, @ModelAttribute Paciente paciente,
 			BindingResult result) {
 		if (!result.hasErrors()) {
 			Paciente miPaciente = new Paciente();
 			miPaciente = paciente;
 			miPaciente = pacienteService.savePaciente(miPaciente);
 			caso.setPaciente(miPaciente.getId());
+			Caso d=new Caso();
 			caso.setEstado(Caso.Estado.OBSERVACION);
 			casoService.saveCaso(caso);
 			Caso nCaso = new Caso();
@@ -301,7 +302,7 @@ public class PacienteController {
 			List<Clinica> listaClinicas = clinicaService.getAllClinicas();
 			model.addAttribute("clinicas", listaClinicas);
 			model.addAttribute("nuevo", caso.getId());
-			return "nuevoCaso";
+			return new RedirectView("/listaCasos");
 		} else {
 
 			Caso nCaso = new Caso();
@@ -314,7 +315,7 @@ public class PacienteController {
 			List<Clinica> listaClinicas = clinicaService.getAllClinicas();
 			model.addAttribute("clinicas", listaClinicas);
 			model.addAttribute("error", "Error");
-			return "nuevoCaso";
+			return new RedirectView("/nuevoCaso");
 		}
 
 	}

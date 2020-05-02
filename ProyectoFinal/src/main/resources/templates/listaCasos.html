@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-US" xmlns:th="http://www.thymeleaf.org">
 <head>
-<div th:replace="/Shared :: header"></div>
+<div th:replace="Shared :: header"></div>
 <title>Producto</title>
 </head>
 
@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="col-12">
 
-			<div th:replace="/Shared :: menu"></div>
+			<div th:replace="Shared :: menu"></div>
 
 		</div>
 	</div>
@@ -81,11 +81,9 @@
 
 	</div>
 	<script>
-		function loading(btn) {
-			btn.innerHTML="<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>"
-		}
+		
 	</script>
-	<div th:replace="/Shared :: js"></div>
+	<div th:replace="Shared :: js"></div>
 </body>
 
 </html>

@@ -45,7 +45,7 @@
 					</li>
 					<li class="nav-item"><a class="nav-link" href="/enfermedad">Enfermedades</a>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="/listaProductos2">Consulta Casos</a>
+					<li class="nav-item"><a class="nav-link" href="/listaCasos">Consulta Casos</a>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="/listaPorDataTables">Lista Por DataTables</a>
 					</li>
@@ -54,7 +54,7 @@
 			</div>
 		</nav>
 		
-=======
+
 	<div class="collapse navbar-collapse" id="navbarColor01">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active"><a class="nav-link" href="/">Inicio
@@ -73,7 +73,7 @@
 
 
 <div th:fragment="casoPaciente" th:object="${paciente}">
-	<input th:if="${paciente.id != null}" id="paciente" th:value="${paciente.id}"  th:field="${paciente.id}" type="hidden">
+	<input th:if="${paciente.id != null}" th:value="${paciente.id}"   type="hidden">
 	<div class="row form-group">
 		<div class="col-6 form-group">
 			<label class="form-control-label" for="pnombre"><strong>Nombre</strong></label> <input
@@ -201,5 +201,9 @@ function actualizarEstadoCaso () {
     	   });
     	});
  
+}
+
+function loading(btn) {
+	btn.innerHTML="<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>"
 }
 </script>
